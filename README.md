@@ -12,4 +12,10 @@ Node 24 is required. Install locked dependencies with `npm ci`, run `npx playwri
 
 Checks: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm audit --audit-level=high`, `npm run test:e2e`.
 
-The full walkthrough and current evidence are recorded in [Validation](docs/product/Validation.md).
+## Local verification — October 1, 2026
+
+Fresh locked install, lint, strict types, **41 domain/storage tests**, production build and **20 production browser journeys** passed. Dependency audit found **0 vulnerabilities**. Desktop, 320px and 390px screenshots were inspected. Browser checks cover the full review/replacement/approval story, stale v1 approval, keyboard focus, cancellation, refresh and storage recovery.
+
+[Walkthrough](docs/product/Sample_Walkthrough.md) · [PRD](docs/product/PRD.md) · [Case study](docs/product/Case_Study.md) · [Decisions and risks](docs/product/Decisions_and_Risks.md).
+
+Exact software evidence, proposed human research and public release gates are centralized in [Validation](docs/product/Validation.md). No human research or commercial outcome is claimed.
