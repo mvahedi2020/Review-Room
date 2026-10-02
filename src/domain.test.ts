@@ -68,6 +68,18 @@ describe('Independent finite story expectations', () => {
     }
     expect(validState(s)).toBe(false)
   })
+  test('v2 changes can be reviewed and resolved without inventing a third version', () => {
+    const c: Context = { ...ctx, version: 'v2' }
+    let s = run(initialState(), { type: 'introduce' }, { ...ctx, role: 'owner' })
+    s = run(s, { type: 'annotate', anchor: 'headline', text: 'Check the invitation.' }, c)
+    s = run(s, { type: 'changes', note: 'Reconsider this wording.' }, c)
+    expect(versionFor(s, c).stage).toBe('changes')
+    expect(s.assets[0].versions.map(v => v.id)).toEqual(['v1', 'v2'])
+    s = run(s, { type: 'resolve', issue: 'issue-2', note: 'Current wording reviewed.' }, c)
+    s = run(s, { type: 'handoff', note: 'Ready after the wording check.' }, c)
+    s = run(s, { type: 'approve' }, { ...c, role: 'approver' })
+    expect(versionFor(s, c).approvals[0]).toMatchObject({ version: 'v2', status: 'approved' })
+  })
   test('finite issue limit is explained and repeated replacement rejected', () => {
     let s = initialState(); for (let i = 0; i < 24; i++) s = run(s, { type: 'annotate', anchor: 'artwork', text: `${i}` })
     expect(() => run(s, { type: 'annotate', anchor: 'artwork', text: 'extra' })).toThrow('24 issue')
