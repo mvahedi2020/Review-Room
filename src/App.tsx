@@ -129,7 +129,7 @@ export default function App() {
         </aside>
       </div>
       <section className="storage-bar" aria-label="Local recovery"><div><strong>{session.mode === 'saved' ? 'Local browser sample' : session.mode === 'invalid' ? 'Saved data needs recovery' : 'Memory only'}</strong><p>{session.notice}</p></div><button className="text-button" onClick={() => preview({ type: 'reset' })}>Reset sample</button></section>
-      <p className="announcement" role="status" aria-live="polite">{message}</p>
+      <p id="review-status" tabIndex={-1} className="announcement" role="status" aria-live="polite">{message}</p>
     </main>
     <footer><span>Fictional creative, people and decisions. Mo: product/program direction. AI: implementation and verification.</span><a href={`${base}docs/product/Case_Study.md`}>Product case study</a><a href={`${base}docs/product/Sample_Walkthrough.md`}>Sample walkthrough</a></footer>
     {modal ? <DecisionDialog preview={modal.preview} onCancel={() => { setModal(null); setMessage('Preview cancelled. Nothing was confirmed.') }} onConfirm={confirm} /> : null}
