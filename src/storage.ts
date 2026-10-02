@@ -21,7 +21,7 @@ export const previewDecision = (session: Session, context: Context, action: Pend
 export function commitDecision(session: Session, pending: Pending, context: Context, getStorage: () => StoragePort): CommitResult {
   if (pending.baseline !== JSON.stringify(session.state) || JSON.stringify(context) !== JSON.stringify(pending.context)) return { session: { ...session, notice: 'This preview is stale. Review the current asset, version and role before trying again.' }, applied: false }
   let storage: StoragePort | undefined
-  let nextSession = session
+  let nextSession: Session
   try {
     storage = getStorage()
     const latest = storage.getItem(storageKey)
