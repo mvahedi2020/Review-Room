@@ -1,5 +1,7 @@
 # Review Room
 
+[Open the live demo](https://mvahedi2020.github.io/Review-Room/) · [Public source](https://github.com/mvahedi2020/Review-Room) · [Verified release evidence](docs/product/Validation.md)
+
 A fictional Northstar campaign review prototype. Feedback and approval belong to the exact asset version reviewed. Mo owns product and program direction; AI assists implementation and verification.
 
 Original vector campaign media, local simulated roles, no external collaboration or real approval authority.

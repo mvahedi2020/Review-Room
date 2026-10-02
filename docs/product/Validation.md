@@ -26,11 +26,12 @@ Recruit fictional-scenario reviewers and approvers only after a separate authori
 
 Discuss with Mo whether every replacement needs approval and how to explain scope without overwhelming the reviewer. Mo’s personal comprehension and acceptance remain unobserved until that discussion occurs.
 
-## Release gates
+## Public release verification — October 1, 2026
 
-- Primary assistant independent source/claim and full-browser review, repair of any concrete findings.
-- GitHub public repository and source head, successful “Verify and publish demo” Actions/Pages release, local/public head agreement and committed build/live-file parity.
-- Public reviewer routes and profile links verified by the primary assistant.
-- Actual discussion with Mo about the exact-version approval tradeoff and limits; personal comprehension cannot be inferred from software tests.
+The primary reviewer independently added an anchored issue, requested changes, resolved it with history, handed off and approved v1, introduced v2, inspected read-only v1 history, and separately handed off and approved v2. Canceling withdrawal preserved approval; confirming it retained a revoked v2 record, while v1 approval remained historical. Refresh preserved the version history. The 320px page had no horizontal overflow; no page or console errors were reported.
 
-These are distinct from local software implementation. S033–S041 functionality and product artifacts map to the [PRD](PRD.md). S042 public publication and personal discussion must be recorded by their owner when actually verified.
+Initial release `0b43366fe8bb7c39b494b25e946857a1e26d46f1` passed [GitHub verification and Pages deployment](https://github.com/mvahedi2020/Review-Room/actions/runs/36972307678). Local HEAD matched public main, the worktree was clean, and all **14 deployed files** matched the local production build and the GitHub deployment artifact byte for byte. The live page rendered its expected entry controls without reported page or console errors. Original SVG media also loaded successfully.
+
+The public [profile](https://github.com/mvahedi2020) provides the case study, PRD, walkthrough and [live demo](https://mvahedi2020.github.io/Review-Room/). These are point-in-time software and publication checks, not uptime, human validation or commercial results. Final documentation-only revisions repeat the repository verification/publication workflow; the private delivery ledger records final-head parity.
+
+The assistant's implementation, verification, publication and reviewer-route work is complete. Mo's personal comprehension, endorsement of provisional choices and actual human research remain unobserved. They cannot be inferred from software checks. This section remains the publication-status record referenced by the other documents.
