@@ -144,7 +144,7 @@ test('production media, documentation and network stay local with no console err
   const errors: string[] = []; const requests: string[] = []
   page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push(m.text()) }); page.on('request', r => requests.push(r.url()))
   await page.reload(); await page.getByRole('button', { name: 'A little afterglow Campaign banner v1 · Active', exact: true }).click(); await introduce(page); await page.getByRole('button', { name: 'v1 Historical', exact: true }).click()
-  expect(await page.locator('img').evaluateAll(imgs => imgs.every(img => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0))).toBe(true)
+  await expect.poll(() => page.locator('img').evaluateAll(imgs => imgs.length > 0 && imgs.every(img => (img as HTMLImageElement).complete && (img as HTMLImageElement).naturalWidth > 0)), { message: 'Every displayed asset finishes loading with valid image dimensions', timeout: 10000 }).toBe(true)
   for (const doc of ['Product_Brief', 'PRD', 'Sample_Contract', 'Case_Study', 'Decisions_and_Risks', 'Validation', 'Sample_Walkthrough']) { const response = await page.request.get(`docs/product/${doc}.md`); expect(response.status()).toBe(200); expect(await response.text()).toMatch(/^# /) }
   expect(errors).toEqual([]); expect(requests.every(url => url.startsWith('http://127.0.0.1:4189/'))).toBe(true)
   await page.setViewportSize({ width: 1440, height: 1000 }); await page.screenshot({ path: 'test-results/review-room-desktop.png', fullPage: true })
