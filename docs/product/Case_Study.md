@@ -10,6 +10,6 @@ The conservative alternative tradeoff is extra review effort for minor replaceme
 
 Recovery follows the same product rule. Resolution preserves original comment identity and context. Reopening returns that issue to review and revokes current approval. Recalling a handoff or withdrawing approval preserves the decision history and requires fresh review. Reset clearly discards both local asset histories. Invalid saved state is retained until explicit reset; unavailable storage retains current confirmed memory and warns about refresh loss.
 
-Actual software verification and proposed evaluation are recorded separately in [Validation](Validation.md). The [walkthrough](Sample_Walkthrough.md), [PRD](PRD.md) and [sample contract](Sample_Contract.md) explain the exact reproducible behavior. Source implementation and browser checks support a working software demonstration; they do not establish research findings, commercial outcomes or Mo’s personal comprehension.
+Software verification and proposed user evaluation are recorded separately in [Validation](Validation.md). The [walkthrough](Sample_Walkthrough.md), [PRD](PRD.md) and [sample contract](Sample_Contract.md) explain the reproducible behavior. Source implementation and browser checks support a working demonstration; they do not establish usability, user acceptance or commercial outcomes.
 
 Mo owns product and program direction. AI assists implementation and verification. The prototype uses no employer/customer media, real integrations, messaging, login or live AI.
