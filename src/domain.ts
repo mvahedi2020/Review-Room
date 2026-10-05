@@ -19,12 +19,14 @@ const record = (x: unknown): x is Record<string, unknown> => typeof x === 'objec
 const keys = (x: Record<string, unknown>, expected: string[]) => Object.keys(x).sort().join('|') === [...expected].sort().join('|')
 const bounded = (x: unknown): x is string => typeof x === 'string' && x.trim() === x && x.length > 0 && x.length <= textLimit
 const idValid = (x: unknown): x is string => typeof x === 'string' && /^(issue|approval|handoff)-[1-9][0-9]{0,4}$/.test(x)
+const recordRevision = (id: unknown): number => typeof id === 'string' ? Number(id.split('-')[1]) : 0
+const ordered = (records: Record<string, unknown>[]) => records.every((r, i) => i === 0 || recordRevision(records[i - 1].id) < recordRevision(r.id))
 export function validState(value: unknown): value is State {
   if (!record(value) || !keys(value, ['schema', 'revision', 'assets']) || value.schema !== 1 || !Number.isInteger(value.revision) || (value.revision as number) < 0 || (value.revision as number) > 10000 || !Array.isArray(value.assets) || value.assets.length !== 2) return false
-  const ids = new Set<string>()
+  const revisions = new Set<number>()
   const uniqueId = (id: unknown, kind: string) => {
-    if (!idValid(id) || !id.startsWith(`${kind}-`) || Number(id.split('-')[1]) > (value.revision as number) || ids.has(id)) return false
-    ids.add(id); return true
+    if (!idValid(id) || !id.startsWith(`${kind}-`) || recordRevision(id) > (value.revision as number) || revisions.has(recordRevision(id))) return false
+    revisions.add(recordRevision(id)); return true
   }
   return value.assets.every((a, index) => {
     if (!record(a) || !keys(a, ['id', 'active', 'versions']) || a.id !== assets[index].id || !Array.isArray(a.versions) || a.versions.length < 1 || a.versions.length > 2 || a.active !== (a.versions.length === 1 ? 'v1' : 'v2')) return false
@@ -37,10 +39,16 @@ export function validState(value: unknown): value is State {
       })
       const handoffsValid = v.handoffs.every(h => record(h) && keys(h, ['id', 'kind', 'note', 'by']) && uniqueId(h.id, 'handoff') && ['changes', 'ready', 'recalled'].includes(h.kind as string) && bounded(h.note) && h.by === 'reviewer')
       const approvalsValid = v.approvals.every(p => record(p) && keys(p, ['id', 'asset', 'version', 'by', 'status', 'reason']) && uniqueId(p.id, 'approval') && p.asset === a.id && p.version === version && p.by === 'approver' && ((p.status === 'approved' && p.reason === null) || (p.status === 'revoked' && bounded(p.reason))))
+      if (!issuesValid || !handoffsValid || !approvalsValid) return false
+      const issues = v.issues as Record<string, unknown>[], handoffs = v.handoffs as Record<string, unknown>[], approvals = v.approvals as Record<string, unknown>[]
+      if (!ordered(issues) || !ordered(handoffs) || !ordered(approvals)) return false
+      // Each retained approval must have followed a ready handoff on this version.
+      // A current approval must also follow the latest handoff, which revokes old approval.
+      if (approvals.some(p => !handoffs.some(h => h.kind === 'ready' && recordRevision(h.id) < recordRevision(p.id)))) return false
       const currentApprovals = v.approvals.filter(p => record(p) && p.status === 'approved')
       const open = v.issues.some(i => record(i) && i.status === 'open')
       const last = v.handoffs.at(-1)
-      return issuesValid && handoffsValid && approvalsValid && currentApprovals.length <= 1 && (currentApprovals.length === 0 || (v.stage === 'ready' && !open)) && (v.stage !== 'ready' || (!open && record(last) && last.kind === 'ready')) && (v.stage !== 'changes' || (record(last) && last.kind === 'changes'))
+      return currentApprovals.length <= 1 && (currentApprovals.length === 0 || (v.stage === 'ready' && !open && record(last) && recordRevision(currentApprovals[0].id) > recordRevision(last.id) && currentApprovals[0] === approvals.at(-1))) && (v.stage !== 'ready' || (!open && record(last) && last.kind === 'ready' && issues.every(i => recordRevision(i.id) < recordRevision(last.id)))) && (v.stage !== 'changes' || (open && record(last) && last.kind === 'changes' && issues.every(i => recordRevision(i.id) < recordRevision(last.id))))
     })
   })
 }

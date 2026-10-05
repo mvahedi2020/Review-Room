@@ -85,4 +85,39 @@ describe('Independent finite story expectations', () => {
     expect(() => run(s, { type: 'annotate', anchor: 'artwork', text: 'extra' })).toThrow('24 issue')
     s = run(s, { type: 'introduce' }, { ...ctx, role: 'owner' }); expect(() => run(s, { type: 'introduce' }, { ...ctx, version: 'v2', role: 'owner' })).toThrow('already active')
   })
+  test('stored approval cannot survive a later reviewer handoff', () => {
+    const s = run(approved(), { type: 'handoff', note: 'Revised review requires renewed approval.' })
+    const p = versionFor(s, ctx).approvals[0]
+    expect(p.status).toBe('revoked')
+    p.status = 'approved'; p.reason = null
+    expect(parseState(JSON.stringify(s))).toBeNull()
+  })
+  test('every stored approval needs a preceding ready handoff', () => {
+    const s = approved(), v = versionFor(s, ctx)
+    s.revision = 3; v.handoffs[0].id = 'handoff-3'
+    expect(validState(s)).toBe(false)
+    v.approvals[0].status = 'revoked'; v.approvals[0].reason = 'Withdrawn.'; v.stage = 'draft'
+    expect(validState(s)).toBe(false)
+  })
+  test('record revisions cannot be reused or reorder the decision history', () => {
+    const shared = approved(); versionFor(shared, ctx).approvals[0].id = 'approval-1'
+    expect(validState(shared)).toBe(false)
+    const reordered = run(ready(), { type: 'handoff', note: 'Second review.' })
+    versionFor(reordered, ctx).handoffs.reverse()
+    expect(validState(reordered)).toBe(false)
+  })
+  test('a ready handoff must follow the issues it claims to review', () => {
+    const s = run(noted(), { type: 'resolve', issue: 'issue-1', note: 'Reviewed.' })
+    const handed = run(s, { type: 'handoff', note: 'Ready after resolving the issue.' })
+    const v = versionFor(handed, ctx)
+    v.issues[0].id = 'issue-3'; v.handoffs[0].id = 'handoff-1'
+    expect(validState(handed)).toBe(false)
+  })
+  test('renewed approval and historical exact-version approval remain valid', () => {
+    const renewed = run(run(approved(), { type: 'handoff', note: 'Renewed reviewer handoff.' }), { type: 'approve' }, { ...ctx, role: 'approver' })
+    expect(parseState(JSON.stringify(renewed))).toEqual(renewed)
+    expect(versionFor(renewed, ctx).approvals.map(p => [p.id, p.status])).toEqual([['approval-2', 'revoked'], ['approval-4', 'approved']])
+    const replaced = run(renewed, { type: 'introduce' }, { ...ctx, role: 'owner' })
+    expect(parseState(JSON.stringify(replaced))).toEqual(replaced)
+  })
 })

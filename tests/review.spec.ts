@@ -110,6 +110,28 @@ test('invalid storage is preserved until explicit reset; reload does not silentl
   await page.getByRole('button', { name: 'Reset sample', exact: true }).click(); await confirm(page, 'Cancel'); expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe('{broken')
   await page.getByRole('button', { name: 'Reset sample', exact: true }).click(); await confirm(page, 'Reset both assets'); await expect(page.getByRole('button', { name: 'Add anchored issue', exact: true })).toBeEnabled()
 })
+test('approval older than a renewed handoff is rejected on reload and preserved until reset', async ({ page }) => {
+  await handoff(page); await approve(page)
+  await role(page, 'reviewer'); await previewNote(page, 'Recall handoff', 'Review needs another pass.'); await confirm(page, 'Confirm recall')
+  await handoff(page)
+  const corrupt = await page.evaluate(k => {
+    const s = JSON.parse(localStorage.getItem(k)!)
+    s.assets[0].versions[0].approvals[0].status = 'approved'
+    s.assets[0].versions[0].approvals[0].reason = null
+    const raw = JSON.stringify(s); localStorage.setItem(k, raw); return raw
+  }, key)
+  await page.reload()
+  await expect(page.getByRole('region', { name: 'Local recovery' })).toContainText('Saved data needs recovery')
+  await expect(page.getByRole('region', { name: 'Local recovery' })).toContainText('preserved')
+  await expect(page.getByText('Approved · exact version', { exact: true })).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Add anchored issue', exact: true })).toBeDisabled()
+  expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(corrupt)
+  await page.getByRole('button', { name: 'Reset sample', exact: true }).click(); await confirm(page, 'Cancel')
+  expect(await page.evaluate(k => localStorage.getItem(k), key)).toBe(corrupt)
+  await page.getByRole('button', { name: 'Reset sample', exact: true }).click(); await confirm(page, 'Reset both assets')
+  await handoff(page); await approve(page); await page.reload()
+  await expect(page.getByText('Approved · exact version', { exact: true })).toBeVisible()
+})
 for (const failure of ['getter', 'getItem', 'setItem']) test(`${failure} failure explains memory-only mode and retains current confirmed action`, async ({ page }) => {
   await page.addInitScript(({ failure }) => { if (failure === 'getter') Object.defineProperty(window, 'localStorage', { get() { throw new Error('unavailable') } }); else Object.defineProperty(Storage.prototype, failure, { value() { throw new Error('unavailable') } }) }, { failure })
   await page.reload(); await annotate(page, 'Kept in current memory.'); await expect(page.getByRole('region', { name: 'Local recovery' })).toContainText('refresh may lose'); await expect(page.getByRole('complementary', { name: 'Version annotations' })).toContainText('Kept in current memory.')

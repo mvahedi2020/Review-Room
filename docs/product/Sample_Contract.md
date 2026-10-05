@@ -12,6 +12,6 @@ Reset discards both assets' local confirmed history and restores the original v1
 
 Only validated confirmed state is stored under `northstar-review-room-v1`. Selection, role, drafts and previews are transient. Refresh opens the active poster with reviewer simulation and restores valid confirmed decisions. Invalid persisted state is preserved until an explicit reset. Storage access failure keeps current confirmed state in memory and warns that refresh may lose it. A full serialized comparison immediately before commit rejects cross-tab divergence even when revision numbers match. Version/asset/role changes and storage events invalidate previews and drafts. This is best-effort local browser storage, not a transactional collaboration backend.
 
-Strict schema validation checks references, unique IDs, version order, active version, bounded text/history, alternating issue events, handoff prerequisites, and approval invariants. React renders free text as text. No external requests are part of the app.
+Strict schema validation checks references, unique action revisions, record/version order, active version, bounded text/history, alternating issue events, handoff prerequisites, and approval invariants. Every retained approval follows a ready handoff on its exact version; a current approval also follows the latest handoff. React renders free text as text. No external requests are part of the app.
 
 See [Validation](Validation.md) for software evidence, proposed research and release gates.

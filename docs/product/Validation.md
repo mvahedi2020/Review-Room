@@ -35,3 +35,11 @@ Initial release `0b43366fe8bb7c39b494b25e946857a1e26d46f1` passed [GitHub verifi
 The public [profile](https://github.com/mvahedi2020) provides the case study, PRD, walkthrough and [live demo](https://mvahedi2020.github.io/Review-Room/). These are point-in-time software and publication checks, not uptime, human validation or commercial results. Final documentation-only revisions repeat the repository verification/publication workflow; the private delivery ledger records final-head parity.
 
 The assistant's implementation, verification, publication and reviewer-route work is complete. Mo's personal comprehension, endorsement of provisional choices and actual human research remain unobserved. They cannot be inferred from software checks. This section remains the publication-status record referenced by the other documents.
+
+## October 4 maintenance — saved approval chronology
+
+Independent audit reproduced an invalid saved record that marked an old approval as current after a newer reviewer handoff. The prior parser accepted it, and a production-browser reload displayed “Approved · exact version.” Four focused unit regressions and the new production recovery journey failed before the repair.
+
+Validation now rejects reused action revisions, reordered retained records, approvals without an earlier ready handoff on their own version, and a current approval preceding the latest handoff. A ready/change-request handoff must follow its retained issues; a change request still needs an open issue. Invalid saved bytes remain preserved until explicit reset. Legitimate renewed approvals and historical v1 approvals remain accepted. These checks use the revisions already recorded; they do not claim full replay of resolution/reopen events or authenticated audit integrity.
+
+Local checks on October 4 passed: lint, strict types, **46 domain/storage tests**, **7 document-renderer tests**, production build, dependency audit (**0 vulnerabilities**), and all **25 production browser journeys** (21 review flows and 4 reading-view flows). The new browser journey verifies rejection on reload, cancellation preserving the invalid bytes, explicit reset, and a fresh valid approval. These are local software results; publication and live-file parity for this maintenance require separate verification. Human evaluation remains unperformed.
