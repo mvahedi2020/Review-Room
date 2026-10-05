@@ -21,3 +21,5 @@ Checks: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm a
 Fresh locked install, lint, strict types, **41 domain/storage tests**, production build and **20 production browser journeys** passed. Dependency audit found **0 vulnerabilities**. Desktop, 320px and 390px screenshots were inspected. Browser checks cover the full review/replacement/approval story, stale v1 approval, keyboard focus, cancellation, refresh and storage recovery.
 
 Exact software evidence, proposed human research and public release gates are centralized in [Validation](docs/product/Validation.md). No human research or commercial outcome is claimed.
+
+Read the [product documents](https://mvahedi2020.github.io/Review-Room/docs/index.html) in the styled reading guide. Canonical Markdown remains in `docs/`.
