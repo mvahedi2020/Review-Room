@@ -40,6 +40,8 @@ export function renderMarkdown(source, current, repo) {
     }
   }
   const rewrite = list => { for (const token of list) {
+    const alignment=token.attrGet('style')?.match(/^text-align:\s*(left|center|right);?$/);
+    if(alignment){token.attrJoin('class',`align-${alignment[1]}`);token.attrs=token.attrs.filter(([name])=>name!=='style');}
     if (token.type==='link_open') token.attrSet('href',readingLink(token.attrGet('href'),current,repo));
     if (token.children) rewrite(token.children);
   }};

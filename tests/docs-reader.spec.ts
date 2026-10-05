@@ -25,6 +25,7 @@ test('every generated document and internal reader link resolves with its sectio
   const errors:string[]=[];const parsed:Record<string,Document>={};for(const [path,html] of Object.entries(htmlByPath))parsed[path]=new DOMParser().parseFromString(html,'text/html');
   for(const entry of docs){const u=new URL(entry.href,base),dom=parsed[u.pathname];if(dom.querySelectorAll('article.prose h1').length!==1)errors.push(entry.source+': missing unique article title');
    if(!dom.querySelector('link[href$="reader.css"]'))errors.push(entry.source+': no reading style');
+   if(dom.querySelector('[style]'))errors.push(entry.source+': inline style incompatible with reader security policy');
    for(const a of dom.querySelectorAll('a[href]')){const url=new URL(a.getAttribute('href')!,u);if(url.origin!==u.origin)continue;
     if(url.pathname.endsWith('.md'))errors.push(entry.source+': raw internal Markdown link '+url.pathname);
     const target=parsed[url.pathname];if(url.pathname.endsWith('.html')&&!target&&!url.pathname.endsWith('/docs/index.html'))errors.push(entry.source+': missing internal reader '+url.pathname);
