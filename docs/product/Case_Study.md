@@ -1,5 +1,9 @@
 # Review Room — keep the decision on the version
 
+Review a design, leave feedback and approve the exact version you inspected. Replacing the design starts a fresh review so earlier approval cannot apply to unseen changes.
+
+**The product choice:** Keep feedback and approval attached to the version actually reviewed. [Try the sample](https://mvahedi2020.github.io/Review-Room/) · [Follow the walkthrough](Sample_Walkthrough.md).
+
 ## User and decision
 
 A campaign reviewer needs to know whether feedback and approval still apply after creative changes. The product choice is to attach each comment, handoff and approval to the exact media version and require independent review after any replacement.
