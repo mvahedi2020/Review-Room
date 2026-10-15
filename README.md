@@ -6,6 +6,8 @@ Review a design, leave feedback and approve the exact version you inspected. Rep
 
 **Try it:** Add a comment to the sample poster, introduce its next version, and inspect which feedback and approvals still apply. [Open the demo](https://mvahedi2020.github.io/Review-Room/) · [Follow the walkthrough](docs/product/Sample_Walkthrough.md).
 
+**Experience connection:** My work at 5th Kind included digital asset review, annotation and approval workflows. This example focuses on keeping an approval attached to the exact version that earned it. [Read the decision to challenge](docs/product/Case_Study.md#experience-and-decision).
+
 Mo owns the product direction and requirements. AI tools assisted implementation and verification.
 
 Original vector campaign media, local simulated roles, no external collaboration or real approval authority.

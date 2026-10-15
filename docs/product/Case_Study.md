@@ -4,6 +4,12 @@ Review a design, leave feedback and approve the exact version you inspected. Rep
 
 **The product choice:** Keep feedback and approval attached to the version actually reviewed. [Try the sample](https://mvahedi2020.github.io/Review-Room/) · [Follow the walkthrough](Sample_Walkthrough.md).
 
+## Experience and decision
+
+My work at 5th Kind included digital asset review, annotation and approval workflows. This example focuses on keeping an approval attached to the exact version that earned it. This is a separate fictional portfolio exercise; its records, rules and results do not reproduce an employer system.
+
+**Decision to challenge:** Which replacement should require another review? The strict version rule is easy to explain, but teams may need a carefully defined exception policy when repeat review costs more than it protects.
+
 ## User and decision
 
 A campaign reviewer needs to know whether feedback and approval still apply after creative changes. The product choice is to attach each comment, handoff and approval to the exact media version and require independent review after any replacement.
