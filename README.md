@@ -29,3 +29,7 @@ Checks: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm a
 Dated software checks, proposed human evaluation and release provenance are centralized in [Validation](docs/product/Validation.md). Working review and recovery flows do not establish approval authority, customer acceptance or commercial impact. No human research has been conducted.
 
 Read the [product documents](https://mvahedi2020.github.io/Review-Room/docs/index.html) in the styled reading guide. Canonical Markdown remains in `docs/`.
+
+## Typography
+
+The app and document reader use **SF Pro** for body text and **Aptos Display** for headings. Fallbacks stay within the approved Aptos, Aptos Display, SF Pro, SF Pro Rounded and Calibri families; native Apple system aliases select SF Pro. Font files are not bundled. The browser selects the first installed choice and may substitute its default if none is available.

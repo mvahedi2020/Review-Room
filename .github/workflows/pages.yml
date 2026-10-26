@@ -2,11 +2,12 @@ name: Verify and publish demo
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 permissions:
   contents: read
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   verify:
@@ -28,6 +29,7 @@ jobs:
         with:
           path: dist
   deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: verify
     runs-on: ubuntu-latest
     permissions:
